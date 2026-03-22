@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <meta name="theme-color" content="#060610"/>
+  <title>Delhi Metro Route Finder</title>
+   <link rel="icon" type="image/png" href="./logo.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+
+<header>
+  <div class="hdr">
+    <a class="logo" href="#">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+          <path d="M6.34 6.34l2.12 2.12M15.54 15.54l2.12 2.12M6.34 17.66l2.12-2.12M15.54 8.46l2.12-2.12"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-title">Delhi Metro</div>
+        <div class="logo-sub">Route Finder</div>
+      </div>
+    </a>
+    <div class="hdr-r">
+      <button class="icon-btn" id="themeBtn" title="Toggle theme" aria-label="Toggle dark/light mode">
+        <span id="themeIcon">◐</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="card search-card">
+    <div class="search-hero">
+      <div class="eyebrow">Delhi NCR Metro Network</div>
+      <h1 class="search-h1">Find Your Route</h1>
+      <p class="search-desc">Shortest path · All lines · Noida Metro walking interchange</p>
+    </div>
+
+    <div class="fields-grid">
+      <div class="field">
+        <label class="field-lbl" for="srcInput">
+          <span class="lbl-dot" style="background:var(--green);box-shadow:0 0 6px var(--green)"></span>
+          From Station
+        </label>
+        <div class="ac-wrap">
+          <input class="stn-input" id="srcInput" placeholder="Search source station…" autocomplete="off" autocorrect="off" spellcheck="false"/>
+          <div class="dd" id="srcDd" role="listbox"></div>
+        </div>
+      </div>
+
+      <div class="swap-col" style="align-self:flex-end">
+        <button class="swap-btn" id="swapBtn" title="Swap stations" aria-label="Swap source and destination">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M7 16V4m0 0L3 8m4-4l4 4M17 8v12m0 0l4-4m-4 4l-4-4"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="field">
+        <label class="field-lbl" for="dstInput">
+          <span class="lbl-dot" style="background:var(--red);box-shadow:0 0 6px var(--red)"></span>
+          To Station
+        </label>
+        <div class="ac-wrap">
+          <input class="stn-input" id="dstInput" placeholder="Search destination station…" autocomplete="off" autocorrect="off" spellcheck="false"/>
+          <div class="dd" id="dstDd" role="listbox"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="find-btn" id="findBtn" aria-label="Find route">
+      <span>Find Route</span>
+      <span class="arr" aria-hidden="true">→</span>
+    </button>
+  </div>
+
+  <div id="recentSec" class="hidden">
+    <div class="sec-lbl">Recent Searches</div>
+    <div class="recent-row" id="recentRow"></div>
+  </div>
+
+  <div class="results-wrap hidden" id="resultsWrap">
+    <div class="card stats-bar">
+      <div class="stat" style="--scan-delay:.05s;--val-delay:.0s;--lbl-delay:.18s"><div class="stat-val" id="sStations">—</div><div class="stat-lbl">Stations</div></div>
+      <div class="stat" style="--scan-delay:.18s;--val-delay:.12s;--lbl-delay:.30s"><div class="stat-val" id="sTime">—</div><div class="stat-lbl">Est. Time</div></div>
+      <div class="stat" style="--scan-delay:.30s;--val-delay:.24s;--lbl-delay:.42s"><div class="stat-val" id="sChanges">—</div><div class="stat-lbl">Changes</div></div>
+      <div class="stat" style="--scan-delay:.42s;--val-delay:.36s;--lbl-delay:.54s"><div class="stat-val" id="sFare">—</div><div class="stat-lbl">Est. Fare</div></div>
+    </div>
+    <div class="card route-viz">
+      <div class="rv-header">
+        <div class="rv-title">Route Map</div>
+        <div class="rv-path" id="rvPath"></div>
+      </div>
+      <div class="route-track" id="routeTrack"></div>
+    </div>
+    <div class="card seg-card">
+      <div class="seg-title">Journey Breakdown</div>
+      <div class="seg-list" id="segList"></div>
+    </div>
+  </div>
+
+  <div class="card error-card hidden" id="errCard">
+    <div class="err-icon">🚇</div>
+    <div class="err-msg" id="errMsg">No route found.</div>
+  </div>
+
+  <div>
+    <div class="sec-lbl">Metro Lines</div>
+    <div class="legend-grid" id="legendGrid"></div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-disclaimer">Delhi Metro Route Finder · Includes Noida Metro walking interchange · For informational purposes only</p>
+    <div class="footer-dev">
+      <div class="dev-avatar">GV</div>
+      <div class="dev-info">
+        <div class="dev-label">Developed by</div>
+        <div class="dev-name">Gaurav Vishwas</div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
