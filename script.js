@@ -836,29 +836,50 @@ function renderStationRow(item, di, delay){
   // Platform detail — only when changing lines
   const isChangingNext=isInterch&&nextLineId&&nextLineId!==lineId&&!nextIsWalk;
   const isChangingHere=isInterch&&prevLineId&&prevLineId!==lineId;
+  
+  // UPDATED: Added a transition row indicating "Move: Platform A to Platform B"
   if((isChangingNext||isChangingHere)&&PLATFORM_INFO[name]){
     const pfmData=PLATFORM_INFO[name];
     const rows=[];
     const curPfm=pfmData[lineId];
     if(curPfm){
-      rows.push({color:METRO.lines[lineId]?.color||color,platform:`Platform ${curPfm.platform}`,label:isChangingHere?'You arrived on':'You are on',direction:curPfm.direction,level:curPfm.level,highlight:false});
+      rows.push({color:METRO.lines[lineId]?.color||color,platform:`Platform ${curPfm.platform}`,label:isChangingHere?'Arrived at':'You are on',direction:curPfm.direction,level:curPfm.level,highlight:false});
     }
     const targetLineId=isChangingNext?nextLineId:null;
     if(targetLineId&&pfmData[targetLineId]){
       const tgt=pfmData[targetLineId];
-      rows.push({color:METRO.lines[targetLineId]?.color||'#888',platform:`Platform ${tgt.platform}`,label:'Change to →',direction:tgt.direction,level:tgt.level,highlight:true});
+      
+      // Inject the transition arrow here
+      if(curPfm) {
+          rows.push({
+             isTransition: true,
+             text: `Move: Platform ${curPfm.platform} ➔ Platform ${tgt.platform}`
+          });
+      }
+
+      rows.push({color:METRO.lines[targetLineId]?.color||'#888',platform:`Platform ${tgt.platform}`,label:'Board from',direction:tgt.direction,level:tgt.level,highlight:true});
     }
     if(rows.length){
       const pfmDetail=document.createElement('div');
       pfmDetail.className='rt-pfm-detail';
-      pfmDetail.innerHTML=rows.map(r=>`
+      pfmDetail.innerHTML=rows.map(r=>{
+        if (r.isTransition) {
+           return `
+             <div class="pfm-walk-path">
+               <div class="pfm-walk-line"></div>
+               <span>${r.text}</span>
+             </div>
+           `;
+        }
+        return `
         <div class="rt-pfm-row${r.highlight?' rt-pfm-row-highlight':''}">
           <span class="pfm-line-dot" style="background:${r.color}"></span>
           <span class="pfm-label-txt">${r.label}</span>
           <span class="pfm-num${r.highlight?' pfm-num-go':''}">${r.platform}</span>
           <span class="pfm-dir">${r.direction}</span>
           <span class="pfm-lvl">${r.level}</span>
-        </div>`).join('');
+        </div>`
+      }).join('');
       content.appendChild(pfmDetail);
     }
   }
@@ -984,7 +1005,18 @@ function renderSegs(segments){
           <span class="seg-pfm-dir">${boardPfm.direction}</span>
         </div>`);
       }
+      
+      // Inject the transition arrow into the Breakdown section too
       if(nextPfm&&nextLineData){
+        if (boardPfm) {
+            rows.push(`
+              <div class="pfm-walk-path" style="margin-left: 2px;">
+                <div class="pfm-walk-line"></div>
+                <span>Move: Platform ${boardPfm.platform} ➔ Platform ${nextPfm.platform}</span>
+              </div>
+            `);
+        }
+        
         rows.push(`<div class="seg-pfm-row">
           <span class="seg-pfm-dot" style="background:${nextLineData.color}"></span>
           <span class="seg-pfm-label">Change to</span>

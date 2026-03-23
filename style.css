@@ -377,22 +377,39 @@ main{
 @keyframes badgePop{0%{opacity:0;transform:scale(.6) translateY(4px)}70%{opacity:1;transform:scale(1.1) translateY(-1px)}100%{opacity:1;transform:scale(1) translateY(0)}}
 
 /* Platform detail */
-.rt-pfm-detail{margin:3px 0 6px 0;padding:7px 11px;border-radius:10px;background:rgba(124,106,255,.055);border:1px solid rgba(124,106,255,.14);display:flex;flex-direction:column;gap:5px;animation:detailReveal .45s var(--ease) both}
+/* UPDATED: Increased padding and gap to give more breathing room between platforms */
+.rt-pfm-detail{margin:3px 0 6px 0;padding:10px 14px;border-radius:10px;background:rgba(124,106,255,.055);border:1px solid rgba(124,106,255,.14);display:flex;flex-direction:column;gap:12px;animation:detailReveal .45s var(--ease) both}
 @keyframes detailReveal{from{opacity:0;transform:translateY(-6px) scaleY(.82);transform-origin:top}to{opacity:1;transform:translateY(0) scaleY(1)}}
+
 .rt-pfm-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:clamp(.62rem,1.5vw,.7rem);color:var(--text2)}
 .rt-pfm-row-highlight{background:rgba(251,191,36,.08);border-radius:7px;padding:3px 6px;margin:-3px -6px;border:1px solid rgba(251,191,36,.2);animation:highlightPulse 2s ease-in-out infinite}
 @keyframes highlightPulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,.2)}50%{box-shadow:0 0 0 4px rgba(251,191,36,.08)}}
-.pfm-line-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 
-/* ADDED: white-space: nowrap to prevent text breaking vertically */
+.pfm-line-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .pfm-label-txt{color:var(--text3);flex-shrink:0;font-size:.9em;white-space:nowrap}
 .pfm-num{font-weight:800;color:#f59e0b;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);padding:1px 8px;border-radius:100px;flex-shrink:0;font-size:clamp(.64rem,1.4vw,.72rem);white-space:nowrap}
-
-/* UPDATED: changed word-break so characters don't stack vertically */
-.pfm-dir{color:var(--text2);font-style:italic;font-size:clamp(.6rem,1.3vw,.66rem);flex:1;min-width:0;overflow-wrap:break-word;word-break:normal}
-
-/* ADDED: white-space: nowrap */
+.pfm-dir{color:var(--text2);font-style:italic;font-size:clamp(.6rem,1.3vw,.66rem);flex:1 1 auto;min-width:140px;overflow-wrap:break-word;word-break:normal;line-height:1.4}
 .pfm-lvl{font-size:clamp(.56rem,1.2vw,.62rem);font-weight:600;background:rgba(255,255,255,.06);border:1px solid var(--border);padding:1px 6px;border-radius:100px;color:var(--text3);flex-shrink:0;white-space:nowrap}
+
+/* ADDED: New CSS classes for explicit "Move" direction indicator */
+.pfm-walk-path {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 2px;
+  color: var(--text2);
+  font-size: clamp(0.6rem, 1.4vw, 0.68rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+.pfm-walk-line {
+  width: 2px;
+  height: 18px;
+  background: repeating-linear-gradient(to bottom, var(--text3) 0, var(--text3) 4px, transparent 4px, transparent 8px);
+  margin-left: 3px;
+  border-radius: 2px;
+  opacity: 0.7;
+}
 
 /* ── Transition rows ── */
 .rt-transition{display:flex;align-items:stretch;opacity:0;transform:translateX(-14px)}
@@ -456,16 +473,14 @@ main{
 .seg-arr{color:var(--text3);flex-shrink:0}
 .seg-walk .seg-head{background:linear-gradient(135deg,#c2410c,#ea580c)!important}
 .seg-walk-desc{font-size:clamp(.66rem,1.5vw,.74rem);color:var(--text2);margin-top:6px;font-style:italic}
-.seg-pfm-block{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:5px}
+
+/* UPDATED: Increased gap in journey breakdown platform block */
+.seg-pfm-block{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:12px}
 .seg-pfm-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:clamp(.7rem,1.7vw,.76rem)}
 .seg-pfm-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-
-/* ADDED: white-space: nowrap to prevent text breaking vertically */
 .seg-pfm-label{color:var(--text3);flex-shrink:0;white-space:nowrap}
 .seg-pfm-badge{font-weight:800;color:#f59e0b;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);padding:2px 8px;border-radius:100px;flex-shrink:0;white-space:nowrap}
-
-/* UPDATED: changed word-break so characters don't stack vertically */
-.seg-pfm-dir{color:var(--text2);font-style:italic;overflow-wrap:break-word;word-break:normal}
+.seg-pfm-dir{color:var(--text2);font-style:italic;flex:1 1 auto;min-width:140px;overflow-wrap:break-word;word-break:normal;line-height:1.4}
 
 /* ── Error ── */
 .error-card{padding:clamp(24px,5vw,40px);text-align:center}
