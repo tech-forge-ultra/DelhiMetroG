@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
   <meta name="theme-color" content="#060610"/>
   <title>Delhi Metro Route Finder</title>
-   <link rel="icon" type="image/png" href="./logo.png">
+  <link rel="icon" type="image/png" href="./logo.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -18,7 +18,7 @@
 <div class="bg-orb bg-orb-1"></div>
 <div class="bg-orb bg-orb-2"></div>
 
-<header>
+<header class="stagger-1">
   <div class="hdr">
     <a class="logo" href="#">
       <div class="logo-mark">
@@ -42,8 +42,7 @@
 </header>
 
 <main>
-
-  <div class="card search-card">
+  <div class="card search-card stagger-2">
     <div class="search-hero">
       <div class="eyebrow">Delhi NCR Metro Network</div>
       <h1 class="search-h1">Find Your Route</h1>
@@ -82,17 +81,28 @@
       </div>
     </div>
 
-    <button class="find-btn" id="findBtn" aria-label="Find route">
+    <button class="find-btn ripple-btn" id="findBtn" aria-label="Find route">
       <span>Find Route</span>
       <span class="arr" aria-hidden="true">→</span>
     </button>
   </div>
 
-  <div id="recentSec" class="hidden">
+  <div id="recentSec" class="hidden stagger-3">
     <div class="sec-lbl">Recent Searches</div>
     <div class="recent-row" id="recentRow"></div>
   </div>
 
+  <!-- Skeleton Loader -->
+  <div id="skeletonLoader" class="hidden" style="width: 100%;">
+    <div class="card stats-bar skeleton-pulse" style="height: 80px; margin-bottom: var(--gap);"></div>
+    <div class="card" style="padding: 24px;">
+      <div class="skeleton-pulse" style="height: 24px; width: 30%; margin-bottom: 24px; border-radius: 6px;"></div>
+      <div class="skeleton-pulse" style="height: 60px; width: 100%; margin-bottom: 16px; border-radius: 12px;"></div>
+      <div class="skeleton-pulse" style="height: 60px; width: 100%; border-radius: 12px;"></div>
+    </div>
+  </div>
+
+  <!-- Results -->
   <div class="results-wrap hidden" id="resultsWrap">
     <div class="card stats-bar">
       <div class="stat" style="--scan-delay:.05s;--val-delay:.0s;--lbl-delay:.18s"><div class="stat-val" id="sStations">—</div><div class="stat-lbl">Stations</div></div>
@@ -100,13 +110,30 @@
       <div class="stat" style="--scan-delay:.30s;--val-delay:.24s;--lbl-delay:.42s"><div class="stat-val" id="sChanges">—</div><div class="stat-lbl">Changes</div></div>
       <div class="stat" style="--scan-delay:.42s;--val-delay:.36s;--lbl-delay:.54s"><div class="stat-val" id="sFare">—</div><div class="stat-lbl">Est. Fare</div></div>
     </div>
+    
     <div class="card route-viz">
       <div class="rv-header">
         <div class="rv-title">Route Map</div>
-        <div class="rv-path" id="rvPath"></div>
+        <div class="rv-actions" style="display: flex; gap: 12px; align-items: center;">
+          <div class="rv-path" id="rvPath"></div>
+          <button id="shareBtn" class="icon-btn" title="Share Route" aria-label="Share route">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/>
+            </svg>
+          </button>
+        </div>
       </div>
+      
+      <!-- Interactive Map Placeholder -->
+      <div id="mapContainer" class="hidden" style="height: 250px; background: var(--bg3); border-radius: 12px; margin-bottom: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text2); border: 1px dashed var(--border-lit);">
+         <span style="font-size: 24px; margin-bottom: 8px;">🗺️</span>
+         <span style="font-size: 0.85rem; font-weight: 600;">Spatial Map View Ready</span>
+         <span style="font-size: 0.7rem; opacity: 0.7;">QGIS / Leaflet Integration Area</span>
+      </div>
+
       <div class="route-track" id="routeTrack"></div>
     </div>
+    
     <div class="card seg-card">
       <div class="seg-title">Journey Breakdown</div>
       <div class="seg-list" id="segList"></div>
@@ -118,16 +145,15 @@
     <div class="err-msg" id="errMsg">No route found.</div>
   </div>
 
-  <div>
+  <div class="stagger-4">
     <div class="sec-lbl">Metro Lines</div>
     <div class="legend-grid" id="legendGrid"></div>
   </div>
-
 </main>
 
 <footer>
   <div class="footer-inner">
-    <p class="footer-disclaimer">Delhi Metro Route Finder · Includes Noida Metro walking interchange · </p>
+    <p class="footer-disclaimer">Delhi Metro Route Finder · Includes Noida Metro walking interchange</p>
     <div class="footer-dev">
       <div class="dev-avatar">GV</div>
       <div class="dev-info">
